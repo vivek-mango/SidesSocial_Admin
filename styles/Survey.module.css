@@ -1,0 +1,59 @@
+.gridcss {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 12px;
+  padding-right: 1.5rem;
+}
+
+.stickycss {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+}
+.gridDiv {
+  padding: 10px;
+  /* border: 1px solid #cfc7c7; */
+  border-radius: 7px;
+}
+.questionCSS {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: center;
+  justify-content: space-between;
+}
+
+.questionList {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.questionList li {
+  background-color: #f4f4f4;
+  padding: 10px;
+  margin-bottom: 10px;
+  border-radius: 5px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.questionList li span {
+  flex-grow: 1;
+  margin-right: 10px;
+}
+
+/* .questionList li button {
+  background-color: transparent;
+  border: none;
+  color: #666;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.questionList li button:hover {
+  color: #333;
+} */

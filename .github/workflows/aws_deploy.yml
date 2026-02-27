@@ -1,0 +1,50 @@
+name: Deploy Next.js application
+
+on:
+  push:
+    branches:
+      - master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Source
+        uses: actions/checkout@v2
+
+      - name: Create .env file
+        run: echo "NEXT_PUBLIC_GRAPHQL_URL=${{ secrets.GRAPHQL_URL }}" >>.env
+
+      - name: Build Docker image
+        run: docker build -t anujsides/slide-social-admin .
+
+      - name: Login with Dockerhub
+        run: docker login -u ${{ secrets.DOCKER_USERNAME }} -p ${{ secrets.DOCKER_PASSWORD }}
+
+      - name: Publish docker image to docker hub
+        run: docker push anujsides/slide-social-admin:latest
+
+  deploy:
+    needs: build
+    runs-on: self-hosted
+    steps:
+      - name: Pull image from docker hub
+        run: docker pull anujsides/slide-social-admin:latest
+
+      - name: Stop and remove old container
+        run: |
+          old_container_id=$(docker ps -aqf "name=slide-social-admin-container")
+          if [ ! -z "$old_container_id" ]; then
+            docker stop $old_container_id
+            docker rm $old_container_id
+          fi
+
+      - name: Remove old Docker image
+        run: |
+          old_image_id=$(docker images -q anujsides/slide-social-admin:latest)
+          if [ ! -z "$old_image_id" ]; then
+            docker rmi -f $old_image_id
+          fi
+
+      - name: Run docker container
+        run: docker run -d -p 3000:3000 --name slide-social-admin-container anujsides/slide-social-admin:latest
